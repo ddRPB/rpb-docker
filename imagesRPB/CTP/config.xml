@@ -1,0 +1,37 @@
+<Configuration>
+    <Server port="80"/>
+    <Pipeline name="localTest Pipeline">
+        <DirectoryImportService
+            name="DirectoryImportService"
+            class="org.rsna.ctp.stdstages.DirectoryImportService"
+            root="roots/DirectoryImportService"
+            import="dicomData/TestDICOM2"
+            interval="10000"
+            acceptDicomObjects="yes"
+            acceptXmlObjects="yes"
+            acceptZipObjects="yes"
+            acceptFileObjects="yes"
+            quarantine="quarantines/ImportServiceQuarantine"/>
+
+        <FileStorageService
+            name="FileStorageService"
+            class="org.rsna.ctp.stdstages.FileStorageService"
+            root="roots/FileStorageService"
+            type="day"
+            timeDepth="0"
+            acceptDuplicateUIDs="yes"
+            acceptDicomObjects="yes"
+            acceptXmlObjects="yes"
+            acceptZipObjects="yes"
+            acceptFileObjects="yes"
+            returnStoredFile="yes"
+            quarantine="quarantines/StorageServiceQuarantine" />
+
+        <DicomExportService
+            name="DicomExportService"
+            class="org.rsna.ctp.stdstages.DicomExportService"
+            root="roots/DicomExportService"
+            url="dicom://CONQUESTSRV1:CONQUESTSRV1@10.128.130.183:5678" />
+    </Pipeline>
+
+</Configuration>

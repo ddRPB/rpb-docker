@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LabKey &mdash; RPB-Containers  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LibreClinica" href="LibreClinica.html" />
+    <link rel="prev" title="Overview" href="About.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> RPB-Containers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="About.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LabKey</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configurations-for-labkey">Configurations for LabKey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#app-service-dockerfile">app-service <em>Dockerfile</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database-service">database-service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-compose">docker-compose</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LibreClinica.html">LibreClinica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conquest%28PACS%29.html">Conquest PACS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CTP.html">CTP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RPB-Portal.html">RPB-Portal</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RPB-Containers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>LabKey</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/LabKey.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="labkey">
+<h1>LabKey<a class="headerlink" href="#labkey" title="Permalink to this headline"></a></h1>
+<p>Some of the components have been replaced with alternate versions in comparison to LabKey setup on production server.
+Currently tested on:</p>
+<section id="configurations-for-labkey">
+<h2>Configurations for LabKey<a class="headerlink" href="#configurations-for-labkey" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>OS</p></th>
+<th class="head"><p>JDK</p></th>
+<th class="head"><p>Container</p></th>
+<th class="head"><p>DataBase</p></th>
+<th class="head"><p>LabKey</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CentOS-7</p></td>
+<td><p>OpenJDK 1.8.0</p></td>
+<td><p>Tomcat 9.0.60</p></td>
+<td><p>PostgreSQL 12</p></td>
+<td><p>LabKey 18.2</p></td>
+</tr>
+</tbody>
+</table>
+<p>To containerize LabKey, we create 2 containers.
+One container would be LabKey18.2 app-service, which is a java webapp. The second container would be PostgreSQL-12 database-service
+Follow the steps as follows, skip the ones which are not applicable:</p>
+<ul class="simple">
+<li><ol class="arabic simple">
+<li><p>If not already installed, Download and install appropriate Docker engine for your machine from <a class="reference external" href="https://www.docker.com/">official source</a></p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">hello-world</span></code> to see if installation was succesfull.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="3">
+<li><p>Once docker is set up and running, Set up a project directory in a preferred location on the local machine.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="4">
+<li><p>In your project folder/directory, create new file and name it exactly <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="5">
+<li><p>Write your own custom Dockerfile or simple use the one shown below. This is for app-service using CentOS-7 as base image.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="app-service-dockerfile">
+<h2>app-service <em>Dockerfile</em><a class="headerlink" href="#app-service-dockerfile" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>FROM centos:7
+
+LABEL <span class="nv">maintainer</span><span class="o">=</span><span class="s2">&quot;RPB-DKFZ&quot;</span>
+<span class="c1"># Update, install only the required packages. Avoid unnecessary packages to keep the image lightweight</span>
+<span class="c1"># Many of the below mentioned packages(eg. vim, lsof etc) are only installed to help in case you need to debug the container</span>
+<span class="c1"># In the production ready image, these can be avoided as they are not required for functioning of the service</span>
+
+RUN yum -y update <span class="o">&amp;&amp;</span> yum -y install elinks <span class="se">\</span>
+    bash-completion <span class="se">\</span>
+    net-tools <span class="se">\</span>
+    unzip <span class="se">\</span>
+    wget <span class="se">\</span>
+    mlocate <span class="se">\</span>
+    epel-release <span class="se">\</span>
+    lsof <span class="se">\</span>
+    bzip2 <span class="se">\</span>
+    vim <span class="se">\</span>
+    gcc <span class="se">\</span>
+    chkconfig
+
+<span class="c1"># install JDK</span>
+RUN yum -y install java-1.8.0-openjdk-devel <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    ln -s /usr/bin/java /usr/local/java8 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    mkdir /usr/local/lk-installer <span class="o">&amp;&amp;</span><span class="se">\</span>
+    <span class="nb">cd</span> /usr/local/lk-installer <span class="o">&amp;&amp;</span><span class="se">\</span>
+    wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.6/bin/apache-tomcat-9.0.6.tar.gz <span class="o">&amp;&amp;</span><span class="se">\</span>
+    tar xvzf apache-tomcat-9.0.6.tar.gz <span class="o">&amp;&amp;</span><span class="se">\</span>
+    mv apache-tomcat-9.0.6 /usr/local/tomcat9 <span class="o">&amp;&amp;</span><span class="se">\</span>
+    groupadd tomcat1 <span class="o">&amp;&amp;</span><span class="se">\</span>
+    useradd -g tomcat1 tomcat1
+
+
+COPY tomcat9.service /usr/lib/systemd/system/
+
+<span class="c1"># LabKey installation</span>
+WORKDIR /usr/local/lk-installer
+
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">COPY command in Dockerfile copies the selected file from source DIR(in project folder or anywhere on your local machine) to destination DIR inside the image</span>
+<span class="s2">Make sure thesefiles are available in your local DIR</span>
+<span class="s2">In the step below, LabKey18.2-60106.64-community-bin.tar.gz is available in my local DIR.</span>
+<span class="s2">If you don&#39;t have this LabKey18.2 file, uncomment the following command below &#39;RUN wget http://labkey.s3.......&#39;</span>
+<span class="s2">Check the link before hand</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+COPY LabKey18.2-60106.64-community-bin.tar.gz /usr/local/lk-installer
+<span class="c1">#RUN wget http://labkey.s3.amazonaws.com/downloads/general/r/18.2/LabKey18.2-60106.64-community-bin.tar.gz &amp;&amp;\</span>
+RUN tar xvzf LabKey18.2-60106.64-community-bin.tar.gz
+
+RUN mv LabKey18.2-60106.64-community-bin /usr/local/labkey
+
+RUN cp /usr/local/labkey/tomcat-lib/* /usr/local/tomcat9/lib <span class="o">&amp;&amp;</span><span class="se">\</span>
+     mkdir /usr/local/tomcat9/conf/Catalina <span class="o">&amp;&amp;</span> mkdir /usr/local/tomcat9/conf/Catalina/localhost
+
+COPY labkey.xml /usr/local/tomcat9/conf/Catalina/localhost
+
+WORKDIR /usr/local/tomcat9
+
+RUN chown -R tomcat1:tomcat1 /usr/local/tomcat9 /usr/local/labkey
+<span class="c1">#ENTRYPOINT [&quot;run.sh&quot;]</span>
+USER tomcat1
+
+CMD <span class="o">[</span><span class="s2">&quot;./bin/catalina.sh&quot;</span>, <span class="s2">&quot;run&quot;</span> <span class="o">]</span>
+</pre></div>
+</div>
+<p>In the Dockerfile above, the <code class="docutils literal notranslate"><span class="pre">COPY</span></code> command has been called three times. Essentially, 3 files are copied from client machine to the image at build time.
+It is essential to make sure that these files are available in local project directory(or elsewhere locally, use an absolute path to avoid mistakes).
+These 3 files are: 1) Unit file <code class="docutils literal notranslate"><span class="pre">tomcat9.service</span></code> for tomcat, 2) LabKey18.2 compressed, and 3) Configuration file <code class="docutils literal notranslate"><span class="pre">labkey.xml</span></code> for labkey.
+These files are available in github repo, alternatively they can be copied from below.</p>
+<ul class="simple">
+<li><p>Unit file <code class="docutils literal notranslate"><span class="pre">tomcat9.service</span></code> for tomcat</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>Unit<span class="o">]</span>
+<span class="nv">Description</span><span class="o">=</span>Tomcat version <span class="m">9</span>.0.6
+<span class="nv">Documentation</span><span class="o">=</span>https://tomcat.apache.org/download-90.cgi
+<span class="nv">After</span><span class="o">=</span>syslog.target
+<span class="nv">After</span><span class="o">=</span>network.target
+
+<span class="o">[</span>Service<span class="o">]</span>
+<span class="nv">Type</span><span class="o">=</span>forking
+<span class="nv">Restart</span><span class="o">=</span>always
+
+<span class="nv">User</span><span class="o">=</span>tomcat1
+<span class="nv">Group</span><span class="o">=</span>tomcat1
+
+<span class="nv">Environment</span><span class="o">=</span><span class="nv">DISPLAY</span><span class="o">=</span>:2.0
+<span class="nv">Environment</span><span class="o">=</span><span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/local/java8
+<span class="nv">Environment</span><span class="o">=</span><span class="nv">JRE_HOME</span><span class="o">=</span>/usr/lib/jvm/jre
+<span class="nv">Environment</span><span class="o">=</span><span class="nv">CATALINA_HOME</span><span class="o">=</span>/usr/local/tomcat9
+<span class="nv">Environment</span><span class="o">=</span><span class="sb">`</span><span class="nv">JAVA_OPTS</span><span class="o">=</span> -Djava.awt.headless<span class="o">=</span><span class="nb">true</span> -Dfile.encoding<span class="o">=</span>UTF-8 -Dorg.apache.el.parser.SKIP_IDENTIFIER_CHECK<span class="o">=</span><span class="nb">true</span> -server -Xms1536m -Xmx1536m -XX:PermSize<span class="o">=</span>512m -XX:MaxPermSize<span class="o">=</span>512m -Dhttp.nonProxyHosts<span class="o">=</span><span class="se">\&quot;</span><span class="m">127</span>.0.0.1<span class="p">|</span>localhost<span class="p">|</span>*.dkfz.de<span class="p">|</span>*.dkfz-heidelberg.de<span class="p">|</span>*.inet.dkfz-heidelberg.de<span class="se">\&quot;</span>
+
+<span class="nv">ExecStart</span><span class="o">=</span>/usr/local/tomcat9/bin/startup.sh
+<span class="nv">ExecStop</span><span class="o">=</span>/usr/local/tomcat9/bin/shutdown.sh
+<span class="nv">SuccessExitStatus</span><span class="o">=</span><span class="m">143</span>
+
+<span class="nv">TimeoutSec</span><span class="o">=</span><span class="m">0</span>
+
+<span class="o">[</span>Install<span class="o">]</span>
+<span class="nv">WantedBy</span><span class="o">=</span>multi-user.target
+</pre></div>
+</div>
+<p>Note: Please check the Environment varibles, they may vary depending on varying base image</p>
+<ul class="simple">
+<li><p>Configured file <code class="docutils literal notranslate"><span class="pre">labkey.xml</span></code> for labkey</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;?xml <span class="nv">version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span> <span class="nv">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span>?&gt;
+&lt;Context <span class="nv">docBase</span><span class="o">=</span><span class="s2">&quot;/usr/local/labkey/labkeywebapp&quot;</span> <span class="nv">reloadable</span><span class="o">=</span><span class="s2">&quot;true&quot;</span> <span class="nv">crossContext</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>&gt;
+
+    &lt;Resource <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;jdbc/labkeyDataSource&quot;</span> <span class="nv">auth</span><span class="o">=</span><span class="s2">&quot;Container&quot;</span>
+        <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;javax.sql.DataSource&quot;</span>
+        <span class="nv">username</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span>
+        <span class="nv">password</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span>
+        <span class="nv">driverClassName</span><span class="o">=</span><span class="s2">&quot;org.postgresql.Driver&quot;</span>
+        <span class="nv">url</span><span class="o">=</span><span class="s2">&quot;jdbc:postgresql://localhost/labkey&quot;</span>
+        <span class="nv">maxActive</span><span class="o">=</span><span class="s2">&quot;20&quot;</span>
+        <span class="nv">maxTotal</span><span class="o">=</span><span class="s2">&quot;20&quot;</span>
+        <span class="nv">maxIdle</span><span class="o">=</span><span class="s2">&quot;10&quot;</span>
+        <span class="nv">accessToUnderlyingConnectionAllowed</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
+        <span class="nv">validationQuery</span><span class="o">=</span><span class="s2">&quot;SELECT 1&quot;</span>
+        /&gt;
+
+    &lt;Resource <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;mail/Session&quot;</span> <span class="nv">auth</span><span class="o">=</span><span class="s2">&quot;Container&quot;</span>
+        <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;javax.mail.Session&quot;</span>
+        mail.smtp.host<span class="o">=</span><span class="s2">&quot;@@smtpHost@@&quot;</span>
+        mail.smtp.user<span class="o">=</span><span class="s2">&quot;@@smtpUser@@&quot;</span>
+        mail.smtp.port<span class="o">=</span><span class="s2">&quot;@@smtpPort@@&quot;</span>/&gt;
+
+    &lt;Resources <span class="nv">cachingAllowed</span><span class="o">=</span><span class="s2">&quot;true&quot;</span> <span class="nv">cacheMaxSize</span><span class="o">=</span><span class="s2">&quot;20000&quot;</span> /&gt;
+
+    &lt;Loader <span class="nv">loaderClass</span><span class="o">=</span><span class="s2">&quot;org.labkey.bootstrap.LabKeyBootstrapClassLoader&quot;</span> /&gt;
+
+    &lt;!-- Encryption key <span class="k">for</span> encrypted property store --&gt;
+    &lt;Parameter <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;MasterEncryptionKey&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;@@masterEncryptionKey@@&quot;</span> /&gt;
+
+    &lt;!-- mzML support via JNI --&gt;
+    &lt;!--
+        &lt;Parameter <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;org.labkey.api.ms2.mzmlLibrary&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;pwiz_swigbindings&quot;</span>&gt;&lt;/Parameter&gt;
+        --&gt;
+
+    &lt;!-- Track installations from Windows Installer --&gt;
+    &lt;!--@@installer@@ &lt;Parameter <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;org.labkey.api.util.mothershipreport.usedInstaller&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>/&gt; @@installer@@--&gt;
+
+    &lt;!-- Pipeline configuration --&gt;
+    &lt;!--@@pipeline@@    &lt;Parameter <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;org.labkey.api.pipeline.config&quot;</span> <span class="nv">value</span><span class="o">=</span><span class="s2">&quot;@@pipelineConfigPath@@&quot;</span>/&gt; @@pipeline@@--&gt;
+
+    &lt;!--        <span class="nv">brokerURL</span><span class="o">=</span><span class="s2">&quot;tcp://localhost:61616&quot;</span> <span class="nv">userName</span><span class="o">=</span><span class="s2">&quot;username&quot;</span> <span class="nv">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span> --&gt;
+    &lt;!--@@jmsConfig@@ &lt;Resource <span class="nv">name</span><span class="o">=</span><span class="s2">&quot;jms/ConnectionFactory&quot;</span> <span class="nv">auth</span><span class="o">=</span><span class="s2">&quot;Container&quot;</span>
+        <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;org.apache.activemq.ActiveMQConnectionFactory&quot;</span>
+        <span class="nv">factory</span><span class="o">=</span><span class="s2">&quot;org.apache.activemq.jndi.JNDIReferenceFactory&quot;</span>
+        <span class="nv">description</span><span class="o">=</span><span class="s2">&quot;JMS Connection Factory&quot;</span>
+        <span class="nv">brokerURL</span><span class="o">=</span><span class="s2">&quot;vm://localhost?broker.persistent=false&amp;amp;broker.useJmx=false&quot;</span>
+        <span class="nv">brokerName</span><span class="o">=</span><span class="s2">&quot;LocalActiveMQBroker&quot;</span>/&gt; @@jmsConfig@@--&gt;
+&lt;/Context&gt;
+</pre></div>
+</div>
+<p>After creating/saving these files in appropriate locations, test the Dockerfile.</p>
+<ul class="simple">
+<li><p>Go to terminal/CLI, go to project directory and run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">-t</span> <span class="pre">labkey:1.0</span> <span class="pre">.</span></code>. Make sure <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> is in the current directory.</p></li>
+<li><p>Upon successfull build, run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">images</span></code> and you shall see a list of images, An image with name <code class="docutils literal notranslate"><span class="pre">labkey</span></code> with the tag <code class="docutils literal notranslate"><span class="pre">1.0</span></code> should be available.</p></li>
+<li><p>The image is ready. Run next command <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-itd</span> <span class="pre">-p</span> <span class="pre">8080:8080</span> <span class="pre">--name</span> <span class="pre">RPBlabkey</span> <span class="pre">labkey:1.0</span></code> to create and run a container.</p></li>
+<li><p>Check the localhost:8080/labkey and an error screen from labkey should be accessible. The error is due to missing database, but out app-service container is successful now.</p></li>
+</ul>
+</section>
+<section id="database-service">
+<h2>database-service<a class="headerlink" href="#database-service" title="Permalink to this headline"></a></h2>
+<p>The second image/container would be for running databse service. We can directly use the official image of PostgreSQL-12 and utilize ENV variables to set up a custom databse in the postgres cluster
+Both the containers should be running on same docker network so that they can reach each other conviently.
+Use docker-compose for efficiency. While using docker-compose, the need to manually create a docker network can be eliminated</p>
+</section>
+<section id="docker-compose">
+<h2>docker-compose<a class="headerlink" href="#docker-compose" title="Permalink to this headline"></a></h2>
+<p>To have have a running instance of LabKey (containerized), use the following docker-compose file. In the local project directory, create a new file named <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> and copy the contents from below.
+These files are also available in git repo.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>version: <span class="s1">&#39;3&#39;</span>
+
+services:
+    labkey:
+        image: lk:18.2
+        network_mode: host
+        build:
+            context: .
+        depends_on:
+            - db_pg12
+        ports:
+            - <span class="m">8080</span>:8080
+        environment:
+            - <span class="nv">PORT</span><span class="o">=</span><span class="m">8080</span>
+            - <span class="nv">JDBC_DATABASE_URL</span><span class="o">=</span>jdbc:postgresql://db_pg12:5432/postgres?user<span class="o">=</span>postgres<span class="p">&amp;</span><span class="nv">password</span><span class="o">=</span>postgres
+   db_pg12:
+        image: postgres:12
+        network_mode: host
+        restart: always
+        volumes:
+            - ./db_data:/var/lib/postgresql/data/
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+        ports:
+        - <span class="m">5432</span>:5432
+volumes:
+   db_data:
+</pre></div>
+</div>
+<p>In terminal, go to project directory where Dockerfile and docker-compose.yaml files rae saved and run <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span> <span class="pre">-d</span></code> .
+Upon success, the Labkey instance should be running without any errors on localhost:8080/labkey now.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="About.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LibreClinica.html" class="btn btn-neutral float-right" title="LibreClinica" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+[Unit]
+Description=Tomcat version 9.0.6
+Documentation=https://tomcat.apache.org/download-90.cgi
+After=syslog.target
+After=network.target
+
+[Service]
+Type=forking
+Restart=always
+
+User=tomcat1
+Group=tomcat1
+
+Environment=DISPLAY=:2.0
+Environment=JAVA_HOME=/usr/local/java8
+Environment=JRE_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_HOME=/usr/local/tomcat9
+Environment=`JAVA_OPTS= -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dorg.apache.el.parser.SKIP_IDENTIFIER_CHECK=true -server -Xms1536m -Xmx1536m -XX:PermSize=512m -XX:MaxPermSize=512m -Dhttp.nonProxyHosts=\"127.0.0.1|localhost|*.dkfz.de|*.dkfz-heidelberg.de|*.inet.dkfz-heidelberg.de\"
+
+ExecStart=/usr/local/tomcat9/bin/startup.sh
+ExecStop=/usr/local/tomcat9/bin/shutdown.sh
+SuccessExitStatus=143
+
+TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target

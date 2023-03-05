@@ -1,0 +1,9 @@
+version: '3'
+services:
+  CTP:
+    image: ctp
+    build:
+      context: .
+    container_name: ctp00
+    ports:
+      - 8080:80

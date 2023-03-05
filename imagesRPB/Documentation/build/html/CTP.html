@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CTP &mdash; RPB-Containers  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RPB-Portal" href="RPB-Portal.html" />
+    <link rel="prev" title="Conquest PACS" href="Conquest%28PACS%29.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> RPB-Containers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="About.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LabKey.html">LabKey</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LibreClinica.html">LibreClinica</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conquest%28PACS%29.html">Conquest PACS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CTP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-image">Setting up the <em>image</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-container">Running the <em>Container</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RPB-Portal.html">RPB-Portal</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RPB-Containers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>CTP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CTP.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ctp">
+<h1>CTP<a class="headerlink" href="#ctp" title="Permalink to this headline"></a></h1>
+<p>To prepare the container, follow the standard process of creating an image using <em>Dockerfile</em> and then running a container using that image.</p>
+<p>Components used:</p>
+<ul class="simple">
+<li><p>OS  : CentOS 7</p></li>
+<li><p>JDK : OpenJDK 1.8.0</p></li>
+<li><p>CTP : Latest version from <a class="reference external" href="http://mirc.rsna.org/download/CTP-installer.jar">official source</a></p></li>
+</ul>
+<div class="line-block">
+<div class="line">Official documentaion for installation on a traditional system can be accessed at <a class="reference external" href="http://mircwiki.rsna.org/index.php?title=CTP-The_RSNA_Clinical_Trial_Processor">http://mircwiki.rsna.org/index.php?title=CTP-The_RSNA_Clinical_Trial_Processor</a> .</div>
+<div class="line">Detailed information on custom pipeline configuration can also be accessed from there.</div>
+</div>
+<section id="setting-up-the-image">
+<h2>Setting up the <em>image</em><a class="headerlink" href="#setting-up-the-image" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>In the project directory, create a new directory named CTP(or any relevant name), it will be referred at root directory of CTP on your local machine.</p></li>
+<li><p>In the root directory of CTP, create a new file named <em>Dockerfile</em></p></li>
+<li><p>Copy the contents from below, save it in the newly created <em>Dockerfile</em> in the CTP root directory</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>FROM centos:7
+
+LABEL <span class="nv">maintainer</span><span class="o">=</span><span class="s2">&quot;RPB-DKFZ&quot;</span>
+
+RUN yum -y update <span class="o">&amp;&amp;</span> yum -y install java-1.8.0-openjdk-devel <span class="se">\</span>
+    wget <span class="se">\</span>
+    bzip2 <span class="se">\</span>
+    vim <span class="se">\</span>
+    gcc <span class="se">\</span>
+    chkconfig <span class="o">&amp;&amp;</span><span class="se">\</span>
+    mkdir /usr/local/ctp <span class="o">&amp;&amp;</span><span class="se">\</span>
+    <span class="nb">cd</span> /usr/local/ctp <span class="o">&amp;&amp;</span><span class="se">\</span>
+    wget http://mirc.rsna.org/download/CTP-installer.jar <span class="o">&amp;&amp;</span><span class="se">\</span>
+    jar xf CTP-installer.jar <span class="o">&amp;&amp;</span><span class="se">\</span>
+    cp ./config/config.xml ./CTP/config.xml.BAK <span class="o">&amp;&amp;</span><span class="se">\</span>
+    <span class="nb">cd</span> CTP <span class="o">&amp;&amp;</span><span class="se">\</span>
+    mv ./linux/ctpService-red.sh ./linux/ctpService-red.sh.BAK <span class="o">&amp;&amp;</span><span class="se">\</span>
+    mkdir dicomData roots quarantines <span class="o">&amp;&amp;</span><span class="se">\</span>
+    groupadd ctp <span class="o">&amp;&amp;</span><span class="se">\</span>
+    useradd -g ctp ctp
+
+COPY ctpService-red.sh /usr/local/ctp/CTP/linux/
+COPY config.xml /usr/local/ctp/CTP/
+
+RUN chown -Rf ctp:ctp /usr/local/ctp/ <span class="o">&amp;&amp;</span><span class="se">\</span>
+    chmod +x /usr/local/ctp/CTP/linux/ctpService-red.sh
+
+WORKDIR /usr/local/ctp/CTP
+
+CMD <span class="o">[</span><span class="s2">&quot;java&quot;</span>,<span class="s2">&quot;-jar&quot;</span>,<span class="s2">&quot;./Runner.jar&quot;</span><span class="o">]</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">The same code is available also as <em>Dockerfile</em> in the github repo(DKFZ-E220/RPB-Containers/imagesRPB/CTP/Dockerfile).</div>
+<div class="line">Important: two files 1.) <em>ctpService-red.sh</em> and, 2.) <em>config.xml</em> should also be copied from the github repo. to the root directory of CTP on local machine.</div>
+<div class="line">Either save these files in same directory which have <em>Dockerfile</em> or use a correct <em>source path</em> in the <code class="docutils literal notranslate"><span class="pre">COPY</span></code> command in the <em>Dockerfile</em>.</div>
+</div>
+<ul class="simple">
+<li><p>Start docker daemon</p></li>
+<li><p>Open terminal and navigate to root directory of CTP</p></li>
+<li><p>To build the image, run the docker build command as follows <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">-t</span> <span class="pre">imgctp:1.0</span> <span class="pre">.</span></code></p></li>
+</ul>
+</section>
+<section id="running-the-container">
+<h2>Running the <em>Container</em><a class="headerlink" href="#running-the-container" title="Permalink to this headline"></a></h2>
+<p>A container can be run using either of the 2 methods:</p>
+<div class="line-block">
+<div class="line"><strong>1. Using</strong> <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> <strong>command</strong></div>
+<div class="line">After successfully building the image in previous step, run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">images</span></code> and it shall show a list of images, An image with name <code class="docutils literal notranslate"><span class="pre">imgctp</span></code> with the tag <code class="docutils literal notranslate"><span class="pre">1.0</span></code> should be available.</div>
+</div>
+<ul class="simple">
+<li><p>Next, to create and start the container, run the docker run command as <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-itd</span> <span class="pre">-p</span> <span class="pre">8080:80</span> <span class="pre">--name</span> <span class="pre">ctp</span> <span class="pre">imgctp:1.0</span></code></p></li>
+<li><p>Running <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code> will list out the running containers, a container with name <strong>ctp</strong> will be listed.</p></li>
+<li><p>CTP service is now running and is also accessible at localhost:8080</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>2. Using</strong> <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code></div>
+<div class="line">docker-compose have certain benefits over docker-run, more so for running multiple containers.</div>
+</div>
+<ul class="simple">
+<li><p>At the root of CTP(project/CTP) directory, create new file named <em>docker-compose.yml</em></p></li>
+<li><p>Copy the code from below to the newly created <em>docker-compose.yml</em> and save it.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>version: <span class="s1">&#39;3&#39;</span>
+services:
+    CTP:
+        image: ctp
+        build:
+            context: .
+        container_name: ctp00
+        ports:
+            - <span class="m">8080</span>:80
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>On terminal, navigate to root dir. of CTP and run <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span> <span class="pre">-d</span></code></p></li>
+<li><p>CTP container will start and can be checked out at <code class="docutils literal notranslate"><span class="pre">localhost:8080</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Conquest%28PACS%29.html" class="btn btn-neutral float-left" title="Conquest PACS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="RPB-Portal.html" class="btn btn-neutral float-right" title="RPB-Portal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

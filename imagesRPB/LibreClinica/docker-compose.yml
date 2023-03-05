@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  libreclinica:
+    image: libreclinica:1.1.0
+#    network_mode: host
+    build:
+      context: .
+    depends_on:
+      - db_pg11
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - JDBC_DATABASE_URL=jdbc:postgresql://db_pg11:5432/postgres?user=postgres&password=postgres
+  db_pg11:
+    image: postgres:11-alpine
+#    network_mode: host
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+volumes:
+  db_data:
